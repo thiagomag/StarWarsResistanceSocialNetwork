@@ -26,8 +26,8 @@ public class RebeldeController {
         return rebeldeService.createRebel(rebelde);
     }
 
-    @PatchMapping("/atualizaLocal")
-    public Optional<Rebelde> atualizarLocalizacao(@RequestBody Localizacao localizacao, @PathParam(value = "nome") String nome) throws IOException {
-        return rebeldeService.updateLocalization(localizacao, nome);
+    @PatchMapping("/atualizaLocal/{id}")
+    public Optional<Rebelde> atualizarLocalizacao(@RequestBody Localizacao localizacao, @PathVariable String id) throws IOException {
+        return rebeldeService.updateLocalization(localizacao, id);
     }
 }

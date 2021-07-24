@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Rebelde {
 
+    private String id;
     private String nome;
     private Integer idade;
     private String genero;
