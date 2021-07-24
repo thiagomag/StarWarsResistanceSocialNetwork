@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Iventario;
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 
 @RequestMapping("/negociacao")
@@ -23,7 +24,7 @@ public class NegociacaoController {
         String nome = objectNode.get("nome").asText();
         TipoItem tipoItem = TipoItem.valueOf(objectNode.get("tipoItem").asText());
         int qtd = Integer.parseInt(objectNode.get("qtd").asText());
-        Iventario iventario = new Iventario(tipoItem, qtd);
-        return negociacaoService.checkTrade(nome, iventario);
+        Inventario inventario = new Inventario(tipoItem, qtd);
+        return negociacaoService.checkTrade(nome, inventario);
     }
 }

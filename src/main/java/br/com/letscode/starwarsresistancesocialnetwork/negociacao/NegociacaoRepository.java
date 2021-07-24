@@ -1,7 +1,8 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Iventario;
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,7 +35,7 @@ public class NegociacaoRepository {
         }
     }
 
-    public void inserirArquivo(String nome, Iventario iventario) throws IOException {
+    public void inserirArquivo(String nome, Inventario inventario) throws IOException {
         try {
             path = Paths.get(String.valueOf(caminho));
             if (!path.toFile().exists()) {
@@ -43,7 +44,7 @@ public class NegociacaoRepository {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        write(format(nome, iventario), StandardOpenOption.APPEND);
+        write(format(nome, inventario), StandardOpenOption.APPEND);
     }
 
     private void write(String clienteStr, StandardOpenOption option) throws IOException {
@@ -53,22 +54,22 @@ public class NegociacaoRepository {
         }
     }
 
-    public List<Iventario> listAll() throws IOException {
-        List<Iventario> iventario;
+    public List<Inventario> listAll() throws IOException {
+        List<Inventario> inventarios;
         try (BufferedReader br = Files.newBufferedReader(path)) {
-            iventario = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
+            inventarios = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
         }
-        return iventario;
+        return inventarios;
     }
 
-    private String format(String nome, Iventario iventario) {
+    private String format(String nome, Inventario iventario) {
         return String.format("%s,%d,%s\r\n",
                 nome,
                 iventario.getQtd(),
                 iventario.getTipoItem());
     }
 
-    private Iventario convert(String linha) {
+    private Inventario convert(String linha) {
         return null;
     }
 
