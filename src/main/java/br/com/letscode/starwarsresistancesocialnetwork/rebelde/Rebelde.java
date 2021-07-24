@@ -2,6 +2,7 @@ package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Iventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +17,12 @@ import java.util.List;
 public class Rebelde {
 
     private String nome;
-    private int idade;
+    private Integer idade;
     private String genero;
     private Localizacao localizacao;
     private List<Iventario> iventario;
+    @JsonIgnore
+    private Integer qtdReport = 0;
+    @JsonIgnore
+    private boolean isTraitor;
 }

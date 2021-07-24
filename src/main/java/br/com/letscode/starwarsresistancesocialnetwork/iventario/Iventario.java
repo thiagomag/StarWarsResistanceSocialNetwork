@@ -13,4 +13,9 @@ public class Iventario {
 
     private TipoItem tipoItem;
     private int qtd;
+
+    @Override
+    public String toString() {
+        return tipoItem + "," + qtd;
+    }
 }
