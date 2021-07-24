@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Iventario;
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class Rebelde {
     private Integer idade;
     private String genero;
     private Localizacao localizacao;
-    private List<Iventario> iventario;
+    private List<Inventario> inventario;
     @JsonIgnore
     private Integer qtdReport = 0;
     @JsonIgnore

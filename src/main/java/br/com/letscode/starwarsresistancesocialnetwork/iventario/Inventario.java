@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Iventario {
+public class Inventario {
 
     private TipoItem tipoItem;
     private int qtd;

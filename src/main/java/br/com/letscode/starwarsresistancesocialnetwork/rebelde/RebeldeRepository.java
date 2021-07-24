@@ -1,5 +1,8 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
+import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -10,8 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -62,6 +64,14 @@ public class RebeldeRepository {
         return rebeldes;
     }
 
+    public void reescreverArquivo(List<Rebelde> listaRebeldes) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        for (Rebelde rebeldeBuilder : listaRebeldes) {
+            builder.append(format(rebeldeBuilder));
+        }
+        write(builder.toString(), StandardOpenOption.CREATE);
+    }
+
     private String format(Rebelde rebelde) {
         return String.format("%s,%d,%s,%d,%s,%s,%s\r\n",
                 rebelde.getNome(),
@@ -70,11 +80,34 @@ public class RebeldeRepository {
                 rebelde.getQtdReport(),
                 rebelde.isTraitor(),
                 rebelde.getLocalizacao(),
-                rebelde.getIventario().toString().replace("[", "").replace("]", "").trim());
+                rebelde.getInventario().toString().replace("[", "").replace("]", "").trim());
     }
 
     private Rebelde convert(String linha) {
-        return null;
+        StringTokenizer token = new StringTokenizer(linha, ",");
+        var rebelde = Rebelde.builder()
+                .nome(token.nextToken())
+                .idade(Integer.valueOf(token.nextToken()))
+                .genero(token.nextToken())
+                .qtdReport(Integer.valueOf(token.nextToken()))
+                .isTraitor(Boolean.parseBoolean(token.nextToken()))
+                .localizacao(Localizacao.builder()
+                        .x(Long.valueOf(token.nextToken()))
+                        .y(Long.valueOf(token.nextToken()))
+                        .z(Long.valueOf(token.nextToken()))
+                        .nomeBase(token.nextToken())
+                        .build())
+                .build();
+        List<Inventario> inventarioList = new ArrayList<>();
+        while (token.hasMoreTokens()) {
+            var inventario = Inventario.builder()
+                    .tipoItem(TipoItem.valueOf(token.nextToken().trim()))
+                    .qtd(Integer.parseInt(token.nextToken().trim()))
+                    .build();
+            inventarioList.add(inventario);
+        }
+        rebelde.setInventario(inventarioList);
+        return rebelde;
     }
 
     public boolean checkRebel(String nome) throws IOException {
