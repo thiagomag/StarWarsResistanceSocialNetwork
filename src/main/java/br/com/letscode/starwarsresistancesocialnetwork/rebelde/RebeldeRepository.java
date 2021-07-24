@@ -73,19 +73,21 @@ public class RebeldeRepository {
     }
 
     private String format(Rebelde rebelde) {
-        return String.format("%s,%d,%s,%d,%s,%s,%s\r\n",
+        return String.format("%s,%s,%d,%s,%d,%s,%s,%s\r\n",
+                rebelde.getId(),
                 rebelde.getNome(),
                 rebelde.getIdade(),
                 rebelde.getGenero(),
                 rebelde.getQtdReport(),
                 rebelde.isTraitor(),
                 rebelde.getLocalizacao(),
-                rebelde.getInventario().toString().replace("[", "").replace("]", "").trim());
+                rebelde.getInventario().toString().replace("[", "").trim().replace("]", "").trim());
     }
 
     private Rebelde convert(String linha) {
         StringTokenizer token = new StringTokenizer(linha, ",");
         var rebelde = Rebelde.builder()
+                .id(token.nextToken())
                 .nome(token.nextToken())
                 .idade(Integer.valueOf(token.nextToken()))
                 .genero(token.nextToken())
