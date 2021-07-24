@@ -14,4 +14,8 @@ public class RebeldeService {
     public Rebelde createRebel(Rebelde rebelde) throws IOException {
         return rebeldeRepository.inserirArquivo(rebelde);
     }
+
+    public boolean checkRebel(String nome) throws IOException {
+        return rebeldeRepository.checkRebel(nome);
+    }
 }

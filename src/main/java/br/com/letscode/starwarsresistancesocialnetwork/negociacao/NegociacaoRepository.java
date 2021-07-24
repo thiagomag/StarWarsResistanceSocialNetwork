@@ -1,7 +1,7 @@
-package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
+package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Iventario;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,9 +16,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Component
-public class RebeldeRepository {
+public class NegociacaoRepository {
 
-    private String caminho = "src/main/resources/dados/rebeldes.csv";
+    private final String caminho = "src/main/resources/dados/negociacao.csv";
 
     private Path path;
 
@@ -34,7 +34,7 @@ public class RebeldeRepository {
         }
     }
 
-    public Rebelde inserirArquivo(Rebelde rebelde) throws IOException {
+    public void inserirArquivo(String nome, Iventario iventario) throws IOException {
         try {
             path = Paths.get(String.valueOf(caminho));
             if (!path.toFile().exists()) {
@@ -43,8 +43,7 @@ public class RebeldeRepository {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        write(format(rebelde), StandardOpenOption.APPEND);
-        return rebelde;
+        write(format(nome, iventario), StandardOpenOption.APPEND);
     }
 
     private void write(String clienteStr, StandardOpenOption option) throws IOException {
@@ -54,36 +53,26 @@ public class RebeldeRepository {
         }
     }
 
-    public List<Rebelde> listAll() throws IOException {
-        List<Rebelde> rebeldes;
+    public List<Iventario> listAll() throws IOException {
+        List<Iventario> iventario;
         try (BufferedReader br = Files.newBufferedReader(path)) {
-            rebeldes = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
+            iventario = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
         }
-        return rebeldes;
+        return iventario;
     }
 
-    private String format(Rebelde rebelde) {
-        return String.format("%s,%d,%s,%d,%s,%s,%s\r\n",
-                rebelde.getNome(),
-                rebelde.getIdade(),
-                rebelde.getGenero(),
-                rebelde.getQtdReport(),
-                rebelde.isTraitor(),
-                rebelde.getLocalizacao(),
-                rebelde.getIventario().toString().replace("[", "").replace("]", "").trim());
+    private String format(String nome, Iventario iventario) {
+        return String.format("%s,%d,%s\r\n",
+                nome,
+                iventario.getQtd(),
+                iventario.getTipoItem());
     }
 
-    private Rebelde convert(String linha) {
+    private Iventario convert(String linha) {
         return null;
     }
 
-    public boolean checkRebel(String nome) throws IOException {
-        //TODO está dando nullPointerException
-        for (Rebelde rebelde : listAll()) {
-            if (rebelde.getNome().equals(nome)){
-                return true;
-            }
-        }
-        return false;
+    public void clearNegociacao() throws IOException {
+        Files.newBufferedWriter(path , StandardOpenOption.TRUNCATE_EXISTING);
     }
 }
