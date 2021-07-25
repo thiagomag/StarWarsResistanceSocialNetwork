@@ -15,9 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Inventario {
 
     @NotNull
-    @NotEmpty
     private TipoItem tipoItem;
-    @NotNull
     @NotEmpty
     private int qtd;
 
