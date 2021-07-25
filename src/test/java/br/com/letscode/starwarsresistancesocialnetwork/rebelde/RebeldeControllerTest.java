@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,10 +33,9 @@ class RebeldeControllerTest {
         this.mockMvc.perform(post("/rebelde")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"id\": \"string\",\n" +
                         "  \"nome\": \"Bodhi Rook\",\n" +
                         "  \"idade\": 25,\n" +
-                        "  \"genero\": \"Masculino\",\n" +
+                        "  \"genero\": \"MASCULINO\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
@@ -53,6 +51,101 @@ class RebeldeControllerTest {
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void adicionarRebeldeSemNome() throws Exception {
+        this.mockMvc.perform(post("/rebelde")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"idade\": 25,\n" +
+                        "  \"genero\": \"MASCULINO\",\n" +
+                        "  \"localizacao\": {\n" +
+                        "    \"x\": 100,\n" +
+                        "    \"y\": -65,\n" +
+                        "    \"z\": -70,\n" +
+                        "    \"nomeBase\": \"Jedha\"\n" +
+                        "  },\n" +
+                        "  \"inventario\": [\n" +
+                        "    {\n" +
+                        "      \"tipoItem\": \"MUNICAO\",\n" +
+                        "      \"qtd\": 20\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void adicionarRebeldeSemAlgumAtributo() throws Exception {
+        this.mockMvc.perform(post("/rebelde")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"idade\": 25,\n" +
+                        "  \"genero\": \"MASCULINO\",\n" +
+                        "  \"localizacao\": {\n" +
+                        "    \"x\": 100,\n" +
+                        "    \"z\": -70,\n" +
+                        "    \"nomeBase\": \"Jedha\"\n" +
+                        "  },\n" +
+                        "  \"inventario\": [\n" +
+                        "    {\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void adicionarRebeldeComGeneroErrado() throws Exception {
+        this.mockMvc.perform(post("/rebelde")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"nome\": \"Bodhi Rook\",\n" +
+                        "  \"idade\": 25,\n" +
+                        "  \"genero\": \"GOY\",\n" +
+                        "  \"localizacao\": {\n" +
+                        "    \"x\": 100,\n" +
+                        "    \"y\": -65,\n" +
+                        "    \"z\": -70,\n" +
+                        "    \"nomeBase\": \"Jedha\"\n" +
+                        "  },\n" +
+                        "  \"inventario\": [\n" +
+                        "    {\n" +
+                        "      \"tipoItem\": \"MUNICAO\",\n" +
+                        "      \"qtd\": 20\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void adicionarRebeldeComTipoItemErrado() throws Exception {
+        this.mockMvc.perform(post("/rebelde")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"nome\": \"Bodhi Rook\",\n" +
+                        "  \"idade\": 25,\n" +
+                        "  \"genero\": \"GOY\",\n" +
+                        "  \"localizacao\": {\n" +
+                        "    \"x\": 100,\n" +
+                        "    \"y\": -65,\n" +
+                        "    \"z\": -70,\n" +
+                        "    \"nomeBase\": \"Jedha\"\n" +
+                        "  },\n" +
+                        "  \"inventario\": [\n" +
+                        "    {\n" +
+                        "      \"tipoItem\": \"VIDEOGAME\",\n" +
+                        "      \"qtd\": 20\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test

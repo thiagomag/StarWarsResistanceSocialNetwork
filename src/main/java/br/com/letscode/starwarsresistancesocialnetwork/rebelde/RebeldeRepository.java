@@ -90,7 +90,7 @@ public class RebeldeRepository {
                 .id(token.nextToken())
                 .nome(token.nextToken())
                 .idade(Integer.valueOf(token.nextToken()))
-                .genero(token.nextToken())
+                .genero(GeneroRebelde.valueOf(token.nextToken()))
                 .qtdReport(Integer.valueOf(token.nextToken()))
                 .isTraitor(Boolean.parseBoolean(token.nextToken()))
                 .localizacao(Localizacao.builder()
@@ -111,5 +111,4 @@ public class RebeldeRepository {
         rebelde.setInventario(inventarioList);
         return rebelde;
     }
-
 }

@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Builder
@@ -17,10 +19,15 @@ import java.util.List;
 public class Rebelde {
 
     private String id;
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+    @NotNull(message = "Idade é obrigatório")
     private Integer idade;
-    private String genero;
+    @NotNull(message = "Genero é obrigatório")
+    private GeneroRebelde genero;
+    @NotNull(message = "Localização é obrigatório")
     private Localizacao localizacao;
+    @NotNull(message = "Itens no inventário são obrigatórios")
     private List<Inventario> inventario;
     @JsonIgnore
     private Integer qtdReport = 0;

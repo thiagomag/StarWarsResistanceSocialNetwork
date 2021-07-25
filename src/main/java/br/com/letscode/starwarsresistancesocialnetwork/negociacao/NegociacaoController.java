@@ -2,6 +2,7 @@ package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class NegociacaoController {
     private final RebeldeService rebeldeService;
 
     @GetMapping()
-    public List listAll() throws IOException {
+    public List<Rebelde> listAll() throws IOException {
         return rebeldeService.listAll();
     }
 

@@ -4,6 +4,7 @@ import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,8 @@ public class RebeldeController {
     }
 
     @PostMapping
-    public Rebelde adicionarRebelde(@RequestBody Rebelde rebelde) throws IOException {
-        return rebeldeService.createRebel(rebelde);
+    public Rebelde adicionarRebelde(@Valid @RequestBody Rebelde rebelde) throws IOException {
+            return rebeldeService.createRebel(rebelde);
     }
 
     @PatchMapping("/atualizaLocal/{id}")
