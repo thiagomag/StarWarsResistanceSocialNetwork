@@ -1,0 +1,71 @@
+package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class RebeldeControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void listarTodos() throws Exception {
+        this.mockMvc.perform(get("/rebelde"))
+                .andDo(print())
+                .andExpect(content().string(containsString("Christophsis")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void adicionarRebelde() throws Exception {
+        this.mockMvc.perform(post("/rebelde")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"id\": \"string\",\n" +
+                        "  \"nome\": \"Bodhi Rook\",\n" +
+                        "  \"idade\": 25,\n" +
+                        "  \"genero\": \"Masculino\",\n" +
+                        "  \"localizacao\": {\n" +
+                        "    \"x\": 100,\n" +
+                        "    \"y\": -65,\n" +
+                        "    \"z\": -70,\n" +
+                        "    \"nomeBase\": \"Jedha\"\n" +
+                        "  },\n" +
+                        "  \"inventario\": [\n" +
+                        "    {\n" +
+                        "      \"tipoItem\": \"MUNICAO\",\n" +
+                        "      \"qtd\": 20\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void atualizarLocalizacao() throws Exception {
+        this.mockMvc.perform(patch("/rebelde/atualizaLocal/2a94818f-8112-45ee-883a-ed2bd9968935")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"x\": 480,\n" +
+                        "  \"y\": 740,\n" +
+                        "  \"z\": 320,\n" +
+                        "  \"nomeBase\": \"Tatooine\"\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+}

@@ -20,7 +20,7 @@ import java.util.List;
 public class NegociacaoController {
 
     private final NegociacaoService negociacaoService;
-    private RebeldeService rebeldeService;
+    private final RebeldeService rebeldeService;
 
     @GetMapping()
     public List listAll() throws IOException {

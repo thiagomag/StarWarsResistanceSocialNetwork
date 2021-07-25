@@ -22,7 +22,7 @@ public class RelatorioService {
         List<Rebelde> listaTraidores = listaRebeldes.stream()
                 .filter(rebelde -> rebelde.isTraitor()).collect(Collectors.toList());
         var qtdTraidores = listaTraidores.size();
-        var traidoresPercent = (qtdTraidores*100)/(qtdTraidores);
+        var traidoresPercent = (qtdTraidores*100)/(qtdRebeldes);
         return String.format("Porcentagem de traidores: %d", traidoresPercent);
     }
 
