@@ -35,7 +35,7 @@ public class NegociacaoRepository {
         }
     }
 
-    public void inserirArquivo(String nome, Inventario inventario) throws IOException {
+    public void inserirArquivo(String id, Inventario inventario) throws IOException {
         try {
             path = Paths.get(String.valueOf(caminho));
             if (!path.toFile().exists()) {
@@ -44,7 +44,7 @@ public class NegociacaoRepository {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        write(format(nome, inventario), StandardOpenOption.APPEND);
+        write(format(id, inventario), StandardOpenOption.APPEND);
     }
 
     private void write(String clienteStr, StandardOpenOption option) throws IOException {
@@ -62,9 +62,9 @@ public class NegociacaoRepository {
         return inventarios;
     }
 
-    private String format(String nome, Inventario iventario) {
+    private String format(String id, Inventario iventario) {
         return String.format("%s,%d,%s\r\n",
-                nome,
+                id,
                 iventario.getQtd(),
                 iventario.getTipoItem());
     }

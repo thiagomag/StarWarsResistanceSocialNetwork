@@ -12,33 +12,34 @@ import java.io.IOException;
 public class NegociacaoService {
 
     final NegociacaoRepository negociacaoRepository;
+
     final RebeldeService rebeldeService;
 
-    public String checkTrade(String nome, Inventario inventario) throws IOException {
-        //TODO implementar a verificação nome existente para ser possivel criar negociacao
-        if(rebeldeService.checkRebel(nome)) {
-            if(checkListNull(nome, inventario) == null) {
-                if (compareTrade(nome, inventario)) {
+    public String checkTrade(String id, Inventario inventario) throws IOException {
+        if (rebeldeService.checkRebel(id)) {
+            if (CheckListNotNull(id, inventario)) {
+                if (compareTrade(id, inventario)) {
                     //TODO implementar atualização dos inventarios
                     negociacaoRepository.clearNegociacao(); //Limpa o arquivo de negociacao após o termino
                     return "Negociação realizada! Iventários atualizados com os novos itens.";
                 }
+                return "A negociação não é equivalente!";
             }
-            return nome + ", a negociação não é equivalente!";
+            return "Nova negociação solicitada!";
         }
-        return nome + " não existe!";
+        return id+" não existe!";
     }
 
-    public String checkListNull(String nome, Inventario inventario) throws IOException {
+    public boolean CheckListNotNull(String id, Inventario inventario) throws IOException {
         if (negociacaoRepository.listAll().size() == 0) { //Se a lista de negociacao for vazia, cria uma nova negociação
-            createTrade(nome, inventario);
-            return nome + ", negociação solicitada!";
+            createTrade(id, inventario);
+            return false;
         }
-        return null;
+        return true;
     }
 
-    public void createTrade(String nome, Inventario inventario) throws IOException {
-        negociacaoRepository.inserirArquivo(nome, inventario);
+    public void createTrade(String id, Inventario inventario) throws IOException {
+        negociacaoRepository.inserirArquivo(id, inventario);
     }
 
     public boolean compareTrade(String nome, Inventario inventario) throws IOException {

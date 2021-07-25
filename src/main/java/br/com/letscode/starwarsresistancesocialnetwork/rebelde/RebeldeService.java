@@ -3,7 +3,6 @@ package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +19,10 @@ public class RebeldeService {
         return rebeldeRepository.inserirArquivo(rebelde);
     }
 
-    public boolean checkRebel(String nome) throws IOException {
-        return rebeldeRepository.checkRebel(nome);
+    public boolean checkRebel(String id) throws IOException {
+        List<Rebelde> listaRebeldes = listAll();
+        Optional<Rebelde> rebelde = listaRebeldes.stream().filter(rebeldeSearch -> rebeldeSearch.getId().equals(id)).findFirst();
+        return rebelde.isPresent();
     }
 
     public List<Rebelde> listAll() throws IOException {

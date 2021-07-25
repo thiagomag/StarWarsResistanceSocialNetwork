@@ -112,13 +112,4 @@ public class RebeldeRepository {
         return rebelde;
     }
 
-    public boolean checkRebel(String nome) throws IOException {
-        //TODO está dando nullPointerException
-        for (Rebelde rebelde : listAll()) {
-            if (rebelde.getNome().equals(nome)){
-                return true;
-            }
-        }
-        return false;
-    }
 }
