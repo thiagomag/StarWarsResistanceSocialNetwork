@@ -37,14 +37,6 @@ public class RebeldeRepository {
     }
 
     public Rebelde inserirArquivo(Rebelde rebelde) throws IOException {
-        try {
-            path = Paths.get(String.valueOf(caminho));
-            if (!path.toFile().exists()) {
-                Files.createFile(path);
-            }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
         write(format(rebelde), StandardOpenOption.APPEND);
         return rebelde;
     }

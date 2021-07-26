@@ -35,6 +35,8 @@ public class RebeldeService {
         if(rebelde.isPresent()) {
             rebelde.get().setLocalizacao(localizacao);
             rebeldeRepository.reescreverArquivo(listaRebeldes);
+        } else {
+            throw new IdRebeldeInvalidoException(id);
         }
         return rebelde;
     }

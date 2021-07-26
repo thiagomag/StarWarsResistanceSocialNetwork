@@ -1,11 +1,14 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -130,7 +133,7 @@ class RebeldeControllerTest {
                 .content("{\n" +
                         "  \"nome\": \"Bodhi Rook\",\n" +
                         "  \"idade\": 25,\n" +
-                        "  \"genero\": \"GOY\",\n" +
+                        "  \"genero\": \"MACULINO\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
@@ -160,5 +163,22 @@ class RebeldeControllerTest {
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void atualizarLocalizacaoComIdIncorreto() throws Exception {
+        String exceptionParam = "O id qlqrcoisa informado não consta no nosso banco de dados";
+        this.mockMvc.perform(patch("/rebelde/atualizaLocal/qlqrcoisa")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"x\": 480,\n" +
+                        "  \"y\": 740,\n" +
+                        "  \"z\": 320,\n" +
+                        "  \"nomeBase\": \"Tatooine\"\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof IdRebeldeInvalidoException))
+                .andExpect(result -> Assertions.assertEquals(exceptionParam, Objects.requireNonNull(result.getResolvedException()).getMessage()))
+                .andExpect(status().isNotFound());
     }
 }

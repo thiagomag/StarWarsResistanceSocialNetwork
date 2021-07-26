@@ -1,11 +1,13 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.IdRebeldeInvalidoException;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class NegociacaoService {
 
     final RebeldeService rebeldeService;
 
-    public String checkTrade(String id, Inventario inventario) throws IOException {
+    public String checkTrade(String id, List<Inventario> inventario) throws IOException {
         if (rebeldeService.checkRebel(id)) {
             if (CheckListNotNull(id, inventario)) {
                 if (compareTrade(id, inventario)) {
@@ -27,10 +29,10 @@ public class NegociacaoService {
             }
             return "Nova negociação solicitada!";
         }
-        return id+" não existe!";
+        throw new IdRebeldeInvalidoException(id);
     }
 
-    public boolean CheckListNotNull(String id, Inventario inventario) throws IOException {
+    public boolean CheckListNotNull(String id, List<Inventario> inventario) throws IOException {
         if (negociacaoRepository.listAll().size() == 0) { //Se a lista de negociacao for vazia, cria uma nova negociação
             createTrade(id, inventario);
             return false;
@@ -38,11 +40,11 @@ public class NegociacaoService {
         return true;
     }
 
-    public void createTrade(String id, Inventario inventario) throws IOException {
+    public void createTrade(String id, List<Inventario> inventario) throws IOException {
         negociacaoRepository.inserirArquivo(id, inventario);
     }
 
-    public boolean compareTrade(String nome, Inventario inventario) throws IOException {
+    public boolean compareTrade(String nome, List<Inventario> inventario) throws IOException {
         var listNegociacao = negociacaoRepository.listAll();
         //TODO implementar verificação de pontos
         //TODO realizar a comparação, caso os pontos sejam equivalentes: realiza a troca, caso negativo: não realiza

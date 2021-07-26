@@ -19,14 +19,13 @@ import java.util.stream.Collectors;
 @Component
 public class NegociacaoRepository {
 
-    private final String caminho = "src/main/resources/dados/negociacao.csv";
-
     private Path path;
 
     @PostConstruct
     public void init() {
         try {
-            path = Paths.get(String.valueOf(caminho));
+            String caminho = "src/main/resources/dados/negociacao.csv";
+            path = Paths.get(caminho);
             if (!path.toFile().exists()) {
                 Files.createFile(path);
             }
@@ -35,15 +34,7 @@ public class NegociacaoRepository {
         }
     }
 
-    public void inserirArquivo(String id, Inventario inventario) throws IOException {
-        try {
-            path = Paths.get(String.valueOf(caminho));
-            if (!path.toFile().exists()) {
-                Files.createFile(path);
-            }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+    public void inserirArquivo(String id, List<Inventario> inventario) throws IOException {
         write(format(id, inventario), StandardOpenOption.APPEND);
     }
 
@@ -62,11 +53,10 @@ public class NegociacaoRepository {
         return inventarios;
     }
 
-    private String format(String id, Inventario iventario) {
-        return String.format("%s,%d,%s\r\n",
+    private String format(String id, List<Inventario> inventario) {
+        return String.format("%s,%s\r\n",
                 id,
-                iventario.getQtd(),
-                iventario.getTipoItem());
+                inventario.toString().replace("[", "").trim().replace("]", "").trim());
     }
 
     private Inventario convert(String linha) {

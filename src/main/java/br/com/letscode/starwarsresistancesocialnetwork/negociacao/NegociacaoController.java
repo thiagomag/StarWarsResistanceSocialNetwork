@@ -4,15 +4,14 @@ import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RequestMapping("/negociacao")
@@ -29,12 +28,8 @@ public class NegociacaoController {
     }
 
     //ex: {"nome": "Luiz", "tipoItem" : "ARMA", "qtd" : "1"}
-    @PostMapping
-    public String addNegociacao(@RequestBody ObjectNode objectNode) throws IOException {
-        String id = objectNode.get("id").asText();
-        TipoItem tipoItem = TipoItem.valueOf(objectNode.get("tipoItem").asText());
-        int qtd = Integer.parseInt(objectNode.get("qtd").asText());
-        Inventario inventario = new Inventario(tipoItem, qtd);
+    @PostMapping("{id}")
+    public String addNegociacao(@PathVariable String id, @RequestBody List<Inventario> inventario) throws IOException {
         return negociacaoService.checkTrade(id, inventario);
     }
 }
