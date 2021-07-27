@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Objects;
 
@@ -77,6 +79,7 @@ class RebeldeControllerTest {
                         "  ]\n" +
                         "}"))
                 .andDo(print())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
                 .andExpect(status().isBadRequest());
     }
 
@@ -98,6 +101,7 @@ class RebeldeControllerTest {
                         "  ]\n" +
                         "}"))
                 .andDo(print())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
                 .andExpect(status().isBadRequest());
     }
 
@@ -123,6 +127,7 @@ class RebeldeControllerTest {
                         "  ]\n" +
                         "}"))
                 .andDo(print())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
                 .andExpect(status().isBadRequest());
     }
 
@@ -148,6 +153,7 @@ class RebeldeControllerTest {
                         "  ]\n" +
                         "}"))
                 .andDo(print())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
                 .andExpect(status().isBadRequest());
     }
 

@@ -42,7 +42,7 @@ public class ReportarRepository {
     public String reportarRebelde(Reportar reportar) throws IOException {
         List<Rebelde> rebeldesList = rebeldeRepository.listAll();
         if (checarSeJaFoiReportado(reportar)){
-            return "rebelde ja foi reportado anteriormente!";
+            throw new RebeldeReportadoAnteriormenteException(reportar.getIdTraidor());
         }
         for (Rebelde rebelde : rebeldesList) {
             if (reportar.getIdTraidor().equals(rebelde.getId())) {
