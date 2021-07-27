@@ -1,13 +1,18 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.IdRebeldeInvalidoException;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +26,9 @@ public class NegociacaoService {
         if (rebeldeService.checkRebel(id)) {
             if (CheckListNotNull(id, inventario)) {
                 if (compareTrade(id, inventario)) {
+
                     //TODO implementar atualização dos inventarios
-                    negociacaoRepository.clearNegociacao(); //Limpa o arquivo de negociacao após o termino
+                    //negociacaoRepository.clearNegociacao(); //Limpa o arquivo de negociacao após o termino
                     return "Negociação realizada! Iventários atualizados com os novos itens.";
                 }
                 return "A negociação não é equivalente!";
@@ -44,11 +50,35 @@ public class NegociacaoService {
         negociacaoRepository.inserirArquivo(id, inventario);
     }
 
-    public boolean compareTrade(String nome, List<Inventario> inventario) throws IOException {
-        var listNegociacao = negociacaoRepository.listAll();
-        //TODO implementar verificação de pontos
-        //TODO realizar a comparação, caso os pontos sejam equivalentes: realiza a troca, caso negativo: não realiza
+
+    public boolean compareTrade(String id, List<Inventario> inventario) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Oque deseja comprar? \n 1 - Comida \n 2 - Água \n 3 - Munição \n 4 - Arma");
+        var opc = sc.nextInt();
+        System.out.print("Informe a quantidade:");
+        var qtd = sc.nextInt();
+        sc.close();
+        var vendedor = rebeldeService.listAll().stream().filter(rebelde -> rebelde.getId().equals(id));
+        var scoreVendedor = calcScore(vendedor.findFirst().get().getInventario());
+
+        if(scoreVendedor >= (opc*qtd)){
+            return true;
+        }
         return false;
+    }
+
+
+
+    public Integer calcScore(List<Inventario> inventario) throws IOException {
+        var totalPonto = 0;
+
+            for (Inventario invent : inventario) {
+                if (invent.getTipoItem().equals(TipoItem.ARMA)){totalPonto += invent.getQtd()*4;}
+                if (invent.getTipoItem().equals(TipoItem.MUNICAO)){totalPonto += invent.getQtd()*3;}
+                if (invent.getTipoItem().equals(TipoItem.AGUA)){totalPonto += invent.getQtd()*2;}
+                if (invent.getTipoItem().equals(TipoItem.COMIDA)){totalPonto += invent.getQtd();}
+            }
+        return totalPonto;
     }
 
 }

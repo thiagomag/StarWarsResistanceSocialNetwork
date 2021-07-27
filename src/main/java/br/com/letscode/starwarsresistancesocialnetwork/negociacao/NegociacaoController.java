@@ -29,7 +29,8 @@ public class NegociacaoController {
 
     //ex: {"nome": "Luiz", "tipoItem" : "ARMA", "qtd" : "1"}
     @PostMapping("{id}")
-    public String addNegociacao(@PathVariable String id, @RequestBody List<Inventario> inventario) throws IOException {
-        return negociacaoService.checkTrade(id, inventario);
+    public String addNegociacao(@PathVariable String id, @RequestBody Rebelde rebelde) throws IOException {
+        return negociacaoService.checkTrade(id, rebelde.getInventario());
     }
+
 }
