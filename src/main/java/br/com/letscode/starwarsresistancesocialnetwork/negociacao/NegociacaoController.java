@@ -1,5 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class NegociacaoController {
 
     private final NegociacaoService negociacaoService;
+
     private final RebeldeService rebeldeService;
 
     @GetMapping()
@@ -26,8 +28,8 @@ public class NegociacaoController {
     }
 
     @PostMapping("{id}")
-    public String addNegociacao(@PathVariable String id, @RequestBody Rebelde rebelde) throws IOException {
-        return negociacaoService.checkTrade(id, rebelde.getInventario());
+    public String addNegociacao(@PathVariable String id, @RequestBody List<Inventario> inventario) throws IOException {
+        return negociacaoService.checkTrade(id, inventario);
     }
 
 }

@@ -10,20 +10,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class NegociacaoRepository {
-
+    private List<Negociacao> registroLinhas = new ArrayList<>();
+    private String caminho = "src/main/resources/dados/negociacao.csv";
     private Path path;
 
     @PostConstruct
     public void init() {
         try {
-            String caminho = "src/main/resources/dados/negociacao.csv";
             path = Paths.get(caminho);
             if (!path.toFile().exists()) {
                 Files.createFile(path);
@@ -44,12 +46,20 @@ public class NegociacaoRepository {
         }
     }
 
-    public List<Inventario> listAll() throws IOException {
-        List<Inventario> inventarios;
-        try (BufferedReader br = Files.newBufferedReader(path)) {
-            inventarios = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
+    public void linhaEmNegociacao() {
+        try (Stream<String> streamLinhas = Files.lines(Path.of(caminho))) {
+            registroLinhas = streamLinhas
+                    .filter(Predicate.not(String::isEmpty))
+                    .map(Negociacao::new)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return inventarios;
+    }
+
+    public List<Negociacao> getAll() {
+        linhaEmNegociacao();
+        return registroLinhas;
     }
 
     private String format(String id, List<Inventario> inventario) {
