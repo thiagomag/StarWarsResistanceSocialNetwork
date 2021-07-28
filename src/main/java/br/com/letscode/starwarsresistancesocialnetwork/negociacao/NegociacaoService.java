@@ -3,16 +3,12 @@ package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.IdRebeldeInvalidoException;
-import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,32 +20,20 @@ public class NegociacaoService {
 
     public String checkTrade(String id, List<Inventario> inventario) throws IOException {
         if (rebeldeService.checkRebel(id)) {
-            if (CheckListNotNull(id, inventario)) {
                 if (compareTrade(id, inventario)) {
-
                     //TODO implementar atualização dos inventarios
-                    //negociacaoRepository.clearNegociacao(); //Limpa o arquivo de negociacao após o termino
-                    return "Negociação realizada! Iventários atualizados com os novos itens.";
+                    //TODO implementar atualização do arquivo negociacao.csv
+                    return "Negociação realizada! Inventários atualizados com os novos itens.";
                 }
-                return "A negociação não é equivalente!";
+                createTrade(id, inventario);
+                return "Nova negociação solicitada!";
             }
-            return "Nova negociação solicitada!";
-        }
         throw new IdRebeldeInvalidoException(id);
-    }
-
-    public boolean CheckListNotNull(String id, List<Inventario> inventario) throws IOException {
-        if (negociacaoRepository.listAll().size() == 0) { //Se a lista de negociacao for vazia, cria uma nova negociação
-            createTrade(id, inventario);
-            return false;
-        }
-        return true;
     }
 
     public void createTrade(String id, List<Inventario> inventario) throws IOException {
         negociacaoRepository.inserirArquivo(id, inventario);
     }
-
 
     public boolean compareTrade(String id, List<Inventario> inventario) throws IOException {
         Scanner sc = new Scanner(System.in);
@@ -67,9 +51,7 @@ public class NegociacaoService {
         return false;
     }
 
-
-
-    public Integer calcScore(List<Inventario> inventario) throws IOException {
+    public Integer calcScore(List<Inventario> inventario){
         var totalPonto = 0;
 
             for (Inventario invent : inventario) {

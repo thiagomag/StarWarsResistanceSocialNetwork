@@ -2,7 +2,6 @@ package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
