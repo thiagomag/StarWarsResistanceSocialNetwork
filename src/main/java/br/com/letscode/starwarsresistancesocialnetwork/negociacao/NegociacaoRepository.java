@@ -14,7 +14,6 @@ import java.util.List;
 public class NegociacaoRepository {
 
     private final RebeldeRepository rebeldeRepository;
-    private final RebeldeService rebeldeService;
 
     @SneakyThrows
     public String troca(Negociacao negociacao) {

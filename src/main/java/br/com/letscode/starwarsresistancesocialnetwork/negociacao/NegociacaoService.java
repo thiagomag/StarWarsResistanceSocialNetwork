@@ -1,6 +1,7 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
 import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.IdRebeldeInvalidoException;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,22 +17,25 @@ public class NegociacaoService {
 
     @SneakyThrows
     public String negociacao(Negociacao negociacao) {
-        if (rebeldeService.checkRebel(negociacao.getIdRebelde1())
-        && rebeldeService.checkRebel(negociacao.getIdRebelde2())){
-            return checarValor(negociacao);
+        if (!rebeldeService.checkRebel(negociacao.getIdRebelde1())){
+           throw new IdRebeldeInvalidoException(negociacao.getIdRebelde1());
         }
-        return "invalid id";
+        if (!rebeldeService.checkRebel(negociacao.getIdRebelde2())){
+            throw new IdRebeldeInvalidoException(negociacao.getIdRebelde2());
+        }
+        return checarInventario(negociacao);
     }
 
-    private String checarValor(Negociacao negociacao) {
+    private String checarInventario(Negociacao negociacao) {
         if (rebeldeService.valorInventario(negociacao.getInventario1())
-        == rebeldeService.valorInventario(negociacao.getInventario2())) {
-            if (inventarioTemOsItems(negociacao.getIdRebelde1(),negociacao.getInventario1())
-            && inventarioTemOsItems(negociacao.getIdRebelde2(),negociacao.getInventario2())){
-                return negociacaoRepository.troca(negociacao);
-            }
+        != rebeldeService.valorInventario(negociacao.getInventario2())) {
+            throw new ValoresNaoBatemException();
         }
-        return "inventarios invalidos";
+        if (!(inventarioTemOsItems(negociacao.getIdRebelde1(),negociacao.getInventario1())
+                && inventarioTemOsItems(negociacao.getIdRebelde2(),negociacao.getInventario2()))){
+            throw new InventarioNaoTemOsItensException();
+        }
+        return negociacaoRepository.troca(negociacao);
     }
 
     private boolean inventarioTemOsItems(String id, Inventario inventario){
