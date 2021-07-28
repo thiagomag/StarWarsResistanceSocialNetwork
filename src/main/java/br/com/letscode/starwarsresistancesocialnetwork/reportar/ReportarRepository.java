@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReportarRepository {
 
-    private String caminho = "src/main/resources/dados/reportes.csv";
+    private final String caminho = "src/main/resources/dados/reportes.csv";
 
     private Path path;
 
@@ -30,7 +30,7 @@ public class ReportarRepository {
     @PostConstruct
     public void init() {
         try {
-            path = Paths.get(String.valueOf(caminho));
+            path = Paths.get(caminho);
             if (!path.toFile().exists()) {
                 Files.createFile(path);
             }
@@ -47,9 +47,7 @@ public class ReportarRepository {
         for (Rebelde rebelde : rebeldesList) {
             if (reportar.getIdTraidor().equals(rebelde.getId())) {
                 rebelde.setQtdReport(rebelde.getQtdReport()+1);
-                if (rebelde.getQtdReport() == 3) {
-                    rebelde.setTraitor(true);
-                }
+                if (rebelde.getQtdReport() == 3) {rebelde.setTraitor(true);}
             }
         }
         rebeldeRepository.reescreverArquivo(rebeldesList);
@@ -71,30 +69,26 @@ public class ReportarRepository {
     }
 
     public boolean checarSeJaFoiReportado(Reportar reportar) throws IOException {
-        List<Reportar> reportes = listReportes();
-        for (Reportar reporte : reportes) {
-            if (reportar.equals(reporte)){
-                return true;
-            }
+        for (Reportar reporte : listReportes()) {
+            if (reportar.equals(reporte)){return true;}
         }
         return false;
-
     }
 
     public void inserirArquivo(Reportar reportar) throws IOException {
         try {
-            path = Paths.get(String.valueOf(caminho));
+            path = Paths.get(caminho);
             if (!path.toFile().exists()) {
                 Files.createFile(path);
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        write(format(reportar), StandardOpenOption.APPEND);
+        write(format(reportar));
     }
 
-    private void write(String clienteStr, StandardOpenOption option) throws IOException {
-        try (BufferedWriter bf = Files.newBufferedWriter(path, option)) {
+    private void write(String clienteStr) throws IOException {
+        try (BufferedWriter bf = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
             bf.flush();
             bf.write(clienteStr);
         }

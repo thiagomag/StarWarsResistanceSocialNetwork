@@ -20,14 +20,13 @@ import java.util.stream.Collectors;
 @Component
 public class RebeldeRepository {
 
-    private String caminho = "src/main/resources/dados/rebeldes.csv";
-
     private Path path;
 
     @PostConstruct
     public void init() {
         try {
-            path = Paths.get(String.valueOf(caminho));
+            String caminho = "src/main/resources/dados/rebeldes.csv";
+            path = Paths.get(caminho);
             if (!path.toFile().exists()) {
                 Files.createFile(path);
             }

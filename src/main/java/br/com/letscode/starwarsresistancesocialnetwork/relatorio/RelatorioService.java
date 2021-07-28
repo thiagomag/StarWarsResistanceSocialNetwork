@@ -38,8 +38,7 @@ public class RelatorioService {
     }
 
     public String pontosReport() throws IOException {
-        List<Rebelde> listaRebeldes = rebeldeService.listAll();
-        List<Rebelde> listaTraidores = listaRebeldes.stream()
+        List<Rebelde> listaTraidores = rebeldeService.listAll().stream()
                 .filter(Rebelde::isTraitor).collect(Collectors.toList());
         int pontosPerdidos = 0;
         for (Rebelde rebelde : listaTraidores) {
@@ -49,7 +48,8 @@ public class RelatorioService {
     }
 
     public String recursosReport() throws IOException {
-        List<Rebelde> listaRebeldes = rebeldeService.listAll();
+        List<Rebelde> listaRebeldes = rebeldeService.listAll().stream()
+                .filter(Rebelde -> !Rebelde.isTraitor()).collect(Collectors.toList());
         float mediaArma = 0, mediaMunicao = 0, mediaAgua = 0, mediaComida = 0;
         for (Rebelde rebelde : listaRebeldes) {
             for (Inventario inventario : rebelde.getInventario()) {
