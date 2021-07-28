@@ -1,7 +1,9 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
+import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +27,15 @@ public class RebeldeService {
         return rebelde.isPresent();
     }
 
+    @SneakyThrows
+    public Rebelde returnRebel(String id) {
+        if(!checkRebel(id)){return null;}
+        for (Rebelde rebelde : listAll()){
+            if (rebelde.getId().equals(id)){return rebelde;}
+        }
+        return null;
+    }
+
     public List<Rebelde> listAll() throws IOException {
         return rebeldeRepository.listAll();
     }
@@ -39,5 +50,10 @@ public class RebeldeService {
             throw new IdRebeldeInvalidoException(id);
         }
         return rebelde;
+    }
+
+    public int valorInventario(Inventario inventario) {
+        return (inventario.getArma()*4) + (inventario.getMunicao()*3)
+                + (inventario.getAgua()*2) + inventario.getComida();
     }
 }

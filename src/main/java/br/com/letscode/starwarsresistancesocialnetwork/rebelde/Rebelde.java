@@ -28,7 +28,7 @@ public class Rebelde {
     @NotNull(message = "Localização é obrigatório")
     private Localizacao localizacao;
     @NotNull(message = "Itens no inventário são obrigatórios")
-    private List<Inventario> inventario;
+    private Inventario inventario;
     @JsonIgnore
     private Integer qtdReport = 0;
     @JsonIgnore

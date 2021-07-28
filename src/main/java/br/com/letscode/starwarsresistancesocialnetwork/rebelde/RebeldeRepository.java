@@ -72,12 +72,12 @@ public class RebeldeRepository {
                 rebelde.getQtdReport(),
                 rebelde.isTraitor(),
                 rebelde.getLocalizacao(),
-                rebelde.getInventario().toString().replace("[", "").trim().replace("]", "").trim());
+                rebelde.getInventario());
     }
 
     private Rebelde convert(String linha) {
         StringTokenizer token = new StringTokenizer(linha, ",");
-        var rebelde = Rebelde.builder()
+        return Rebelde.builder()
                 .id(token.nextToken())
                 .nome(token.nextToken())
                 .idade(Integer.valueOf(token.nextToken()))
@@ -90,16 +90,12 @@ public class RebeldeRepository {
                         .z(Long.valueOf(token.nextToken()))
                         .nomeBase(token.nextToken())
                         .build())
+                .inventario(Inventario.builder()
+                .arma(Integer.parseInt(token.nextToken()))
+                .municao(Integer.parseInt(token.nextToken()))
+                .agua(Integer.parseInt(token.nextToken()))
+                .comida(Integer.parseInt(token.nextToken()))
+                .build())
                 .build();
-        List<Inventario> inventarioList = new ArrayList<>();
-        while (token.hasMoreTokens()) {
-            var inventario = Inventario.builder()
-                    .tipoItem(TipoItem.valueOf(token.nextToken().trim()))
-                    .qtd(Integer.parseInt(token.nextToken().trim()))
-                    .build();
-            inventarioList.add(inventario);
-        }
-        rebelde.setInventario(inventarioList);
-        return rebelde;
     }
 }

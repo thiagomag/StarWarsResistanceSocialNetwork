@@ -1,68 +1,55 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeRepository;
+import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class NegociacaoRepository {
 
-    private Path path;
+    private final RebeldeRepository rebeldeRepository;
+    private final RebeldeService rebeldeService;
 
-    @PostConstruct
-    public void init() {
-        try {
-            String caminho = "src/main/resources/dados/negociacao.csv";
-            path = Paths.get(caminho);
-            if (!path.toFile().exists()) {
-                Files.createFile(path);
+    @SneakyThrows
+    public String troca(Negociacao negociacao) {
+        List<Rebelde> rebeldesList = rebeldeRepository.listAll();
+        for (Rebelde rebelde : rebeldesList) {
+            if (rebelde.getId().equals(negociacao.getIdRebelde1())){
+                rebelde.getInventario().setArma(
+                        rebelde.getInventario().getArma()+negociacao.getInventario2().getArma()
+                                -negociacao.getInventario1().getArma());
+                rebelde.getInventario().setMunicao(
+                        rebelde.getInventario().getMunicao()+negociacao.getInventario2().getMunicao()
+                                -negociacao.getInventario1().getMunicao());
+                rebelde.getInventario().setAgua(
+                        rebelde.getInventario().getAgua()+negociacao.getInventario2().getAgua()
+                                -negociacao.getInventario1().getAgua());
+                rebelde.getInventario().setComida(
+                        rebelde.getInventario().getComida()+negociacao.getInventario2().getComida()
+                                -negociacao.getInventario1().getComida());
             }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+            if (rebelde.getId().equals(negociacao.getIdRebelde2())){
+                rebelde.getInventario().setArma(
+                        rebelde.getInventario().getArma()+negociacao.getInventario1().getArma()
+                                -negociacao.getInventario2().getArma());
+                rebelde.getInventario().setMunicao(
+                        rebelde.getInventario().getMunicao()+negociacao.getInventario1().getMunicao()
+                                -negociacao.getInventario2().getMunicao());
+                rebelde.getInventario().setAgua(
+                        rebelde.getInventario().getAgua()+negociacao.getInventario1().getAgua()
+                                -negociacao.getInventario2().getAgua());
+                rebelde.getInventario().setComida(
+                        rebelde.getInventario().getComida()+negociacao.getInventario1().getComida()
+                                -negociacao.getInventario2().getComida());
+            }
         }
-    }
-
-    public void inserirArquivo(String id, List<Inventario> inventario) throws IOException {
-        write(format(id, inventario), StandardOpenOption.APPEND);
-    }
-
-    private void write(String clienteStr, StandardOpenOption option) throws IOException {
-        try (BufferedWriter bf = Files.newBufferedWriter(path, option)) {
-            bf.flush();
-            bf.write(clienteStr);
-        }
-    }
-
-    public List<Inventario> listAll() throws IOException {
-        List<Inventario> inventarios;
-        try (BufferedReader br = Files.newBufferedReader(path)) {
-            inventarios = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::convert).collect(Collectors.toList());
-        }
-        return inventarios;
-    }
-
-    private String format(String id, List<Inventario> inventario) {
-        return String.format("%s,%s\r\n",
-                id,
-                inventario.toString().replace("[", "").trim().replace("]", "").trim());
-    }
-
-    private Inventario convert(String linha) {
-        return null;
-    }
-
-    public void clearNegociacao() throws IOException {
-        Files.newBufferedWriter(path , StandardOpenOption.TRUNCATE_EXISTING);
+        rebeldeRepository.reescreverArquivo(rebeldesList);
+        return "Negociacao feita.";
     }
 }

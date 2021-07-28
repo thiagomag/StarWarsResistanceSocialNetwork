@@ -4,7 +4,6 @@ import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +24,9 @@ public class NegociacaoController {
         return rebeldeService.listAll();
     }
 
-    @PostMapping("{id}")
-    public String addNegociacao(@PathVariable String id, @RequestBody Rebelde rebelde) throws IOException {
-        return negociacaoService.checkTrade(id, rebelde.getInventario());
+    @PostMapping()
+    public String addNegociacao( @RequestBody Negociacao negociacao) {
+        return negociacaoService.negociacao(negociacao);
     }
 
 }

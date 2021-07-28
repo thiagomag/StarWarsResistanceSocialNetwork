@@ -14,13 +14,16 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class Inventario {
 
-    @NotNull
-    private TipoItem tipoItem;
-    @NotEmpty
-    private int qtd;
+    private int arma;
+    private int municao;
+    private int agua;
+    private int comida;
 
     @Override
     public String toString() {
-        return tipoItem + "," + qtd;
+        return arma + "," +
+                municao + "," +
+                agua + "," +
+                comida;
     }
 }
