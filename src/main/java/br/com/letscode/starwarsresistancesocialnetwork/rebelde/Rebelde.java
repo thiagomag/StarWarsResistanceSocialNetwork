@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Builder
 @Data

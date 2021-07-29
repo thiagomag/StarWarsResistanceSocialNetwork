@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,12 +24,12 @@ public class RebeldeService {
     public boolean checkRebel(String id) throws IOException {
         List<Rebelde> listaRebeldes = listAll();
         Optional<Rebelde> rebelde = listaRebeldes.stream().filter(rebeldeSearch -> rebeldeSearch.getId().equals(id)).findFirst();
-        return rebelde.isPresent();
+        return rebelde.isEmpty();
     }
 
     @SneakyThrows
     public Rebelde returnRebel(String id) {
-        if(!checkRebel(id)){return null;}
+        if(checkRebel(id)){return null;}
         for (Rebelde rebelde : listAll()){
             if (rebelde.getId().equals(id)){return rebelde;}
         }

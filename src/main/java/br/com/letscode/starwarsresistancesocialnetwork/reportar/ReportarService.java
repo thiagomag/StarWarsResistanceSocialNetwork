@@ -21,7 +21,7 @@ public class ReportarService {
         Optional<Rebelde> rebeldeDenunciante = rebeldeRepository.listAll().stream().filter(rebeldeSearch -> rebeldeSearch.getId().equals(reportar.getIdDenunciante())).findFirst();
         if (rebeldeTraidor.isEmpty()) {
             throw new IdRebeldeInvalidoException(reportar.getIdTraidor());
-        }  else if (rebeldeDenunciante.isEmpty()) {
+        } else if (rebeldeDenunciante.isEmpty()) {
             throw new IdRebeldeInvalidoException(reportar.getIdDenunciante());
         } else if (reportar.getIdTraidor().equals(reportar.getIdDenunciante())){
             throw new ReportarASiMesmoException();

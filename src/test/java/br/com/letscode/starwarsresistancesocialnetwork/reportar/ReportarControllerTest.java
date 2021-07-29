@@ -29,8 +29,8 @@ class ReportarControllerTest {
         this.mockMvc.perform(post("/reportar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"idDenunciante\": \"2a94818f-8112-45ee-883a-ed2bd9968935\",\n" +
-                        "  \"idTraidor\": \"661cd317-804b-49c3-a0ae-2d2422423845\"\n" +
+                        "  \"idDenunciante\": \"f7417e70-f692-4589-847a-c62f3954468e\",\n" +
+                        "  \"idTraidor\": \"f78b007d-d2b0-4ff2-8192-04f460fd5e77\"\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk())

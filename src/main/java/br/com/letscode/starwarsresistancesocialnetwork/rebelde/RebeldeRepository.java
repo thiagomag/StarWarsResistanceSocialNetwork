@@ -1,7 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.TipoItem;
+import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.StringTokenizer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -91,11 +92,11 @@ public class RebeldeRepository {
                         .nomeBase(token.nextToken())
                         .build())
                 .inventario(Inventario.builder()
-                .arma(Integer.parseInt(token.nextToken()))
-                .municao(Integer.parseInt(token.nextToken()))
-                .agua(Integer.parseInt(token.nextToken()))
-                .comida(Integer.parseInt(token.nextToken()))
-                .build())
+                        .arma(Integer.parseInt(token.nextToken()))
+                        .municao(Integer.parseInt(token.nextToken()))
+                        .agua(Integer.parseInt(token.nextToken()))
+                        .comida(Integer.parseInt(token.nextToken()))
+                        .build())
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package br.com.letscode.starwarsresistancesocialnetwork.iventario;
+package br.com.letscode.starwarsresistancesocialnetwork.inventario;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.IdRebeldeInvalidoException;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,10 @@ public class NegociacaoService {
 
     @SneakyThrows
     public String negociacao(Negociacao negociacao) {
-        if (!rebeldeService.checkRebel(negociacao.getIdRebelde1())){
-           throw new IdRebeldeInvalidoException(negociacao.getIdRebelde1());
+        if (rebeldeService.checkRebel(negociacao.getIdRebelde1())){
+            throw new IdRebeldeInvalidoException(negociacao.getIdRebelde1());
         }
-        if (!rebeldeService.checkRebel(negociacao.getIdRebelde2())){
+        if (rebeldeService.checkRebel(negociacao.getIdRebelde2())){
             throw new IdRebeldeInvalidoException(negociacao.getIdRebelde2());
         }
         return checarInventario(negociacao);
@@ -28,19 +28,19 @@ public class NegociacaoService {
 
     private String checarInventario(Negociacao negociacao) {
         if (rebeldeService.valorInventario(negociacao.getInventario1())
-        != rebeldeService.valorInventario(negociacao.getInventario2())) {
+                != rebeldeService.valorInventario(negociacao.getInventario2())) {
             throw new ValoresNaoBatemException();
         }
         if (!(inventarioTemOsItems(negociacao.getIdRebelde1(),negociacao.getInventario1())
                 && inventarioTemOsItems(negociacao.getIdRebelde2(),negociacao.getInventario2()))){
             throw new InventarioNaoTemOsItensException();
         }
-        return negociacaoRepository.troca(negociacao);
+        return negociacaoRepository.atualizaInventario(negociacao);
     }
 
     private boolean inventarioTemOsItems(String id, Inventario inventario){
         if (rebeldeService.returnRebel(id).getInventario().getArma() <
-        inventario.getArma()){return false;}
+                inventario.getArma()){return false;}
         if (rebeldeService.returnRebel(id).getInventario().getMunicao() <
                 inventario.getMunicao()){return false;}
         if (rebeldeService.returnRebel(id).getInventario().getAgua() <

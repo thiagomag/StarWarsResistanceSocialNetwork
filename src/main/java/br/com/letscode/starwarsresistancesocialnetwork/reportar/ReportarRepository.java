@@ -3,36 +3,32 @@ package br.com.letscode.starwarsresistancesocialnetwork.reportar;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
 import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeRepository;
 import com.opencsv.CSVReader;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
+@Repository
 public class ReportarRepository {
 
-    private final String caminho = "src/main/resources/dados/reportes.csv";
-
-    private Path path;
-
+    private File file;
     private final RebeldeRepository rebeldeRepository;
 
-    @PostConstruct
-    public void init() {
+    public ReportarRepository(@Value("${files.reportes}") String fileName, RebeldeRepository rebeldeRepository) {
+        this.rebeldeRepository = rebeldeRepository;
         try {
-            path = Paths.get(caminho);
-            if (!path.toFile().exists()) {
-                Files.createFile(path);
+            this.file = new ClassPathResource(fileName).getFile();
+            if (!file.exists()) {
+                Files.createFile(Path.of(file.getPath()));
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -44,20 +40,24 @@ public class ReportarRepository {
         if (checarSeJaFoiReportado(reportar)){
             throw new RebeldeReportadoAnteriormenteException(reportar.getIdTraidor());
         }
+        findRebelde(reportar, rebeldesList);
+        rebeldeRepository.reescreverArquivo(rebeldesList);
+        inserirArquivo(reportar);
+        return "rebelde reportado.";
+    }
+
+    private void findRebelde(Reportar reportar, List<Rebelde> rebeldesList) {
         for (Rebelde rebelde : rebeldesList) {
             if (reportar.getIdTraidor().equals(rebelde.getId())) {
                 rebelde.setQtdReport(rebelde.getQtdReport()+1);
                 if (rebelde.getQtdReport() == 3) {rebelde.setTraitor(true);}
             }
         }
-        rebeldeRepository.reescreverArquivo(rebeldesList);
-        inserirArquivo(reportar);
-        return "rebelde reportado.";
     }
 
     public List<Reportar> listReportes() throws IOException {
         List<Reportar> reportes;
-        try (CSVReader reader = new CSVReader(new FileReader(caminho))) {
+        try (CSVReader reader = new CSVReader(new FileReader(file))) {
             reportes = new ArrayList<>();
             String[] line;
             while ((line = reader.readNext()) != null) {
@@ -76,21 +76,13 @@ public class ReportarRepository {
     }
 
     public void inserirArquivo(Reportar reportar) throws IOException {
-        try {
-            path = Paths.get(caminho);
-            if (!path.toFile().exists()) {
-                Files.createFile(path);
-            }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
         write(format(reportar));
     }
 
-    private void write(String clienteStr) throws IOException {
-        try (BufferedWriter bf = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+    private void write(String reportarStr) throws IOException {
+        try (BufferedWriter bf = Files.newBufferedWriter(Path.of(file.getPath()), StandardOpenOption.APPEND)) {
             bf.flush();
-            bf.write(clienteStr);
+            bf.write(reportarStr);
         }
     }
 

@@ -1,6 +1,6 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.iventario.Inventario;
+import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
