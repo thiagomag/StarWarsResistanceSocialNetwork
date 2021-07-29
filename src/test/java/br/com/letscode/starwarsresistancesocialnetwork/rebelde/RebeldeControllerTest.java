@@ -44,15 +44,15 @@ class RebeldeControllerTest {
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
-                        "    \"z\": -70,\n" +
+                        "    \"z\": -80,\n" +
                         "    \"nomeBase\": \"Jedha\"\n" +
                         "  },\n" +
-                        "  \"inventario\": [\n" +
-                        "    {\n" +
-                        "      \"tipoItem\": \"MUNICAO\",\n" +
-                        "      \"qtd\": 20\n" +
-                        "    }\n" +
-                        "  ]\n" +
+                        "  \"inventario\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"municao\": 20,\n" +
+                        "    \"agua\": 40,\n" +
+                        "    \"comida\": 10\n" +
+                        "  }\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -68,15 +68,15 @@ class RebeldeControllerTest {
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
-                        "    \"z\": -70,\n" +
+                        "    \"z\": -80,\n" +
                         "    \"nomeBase\": \"Jedha\"\n" +
                         "  },\n" +
-                        "  \"inventario\": [\n" +
-                        "    {\n" +
-                        "      \"tipoItem\": \"MUNICAO\",\n" +
-                        "      \"qtd\": 20\n" +
-                        "    }\n" +
-                        "  ]\n" +
+                        "  \"inventario\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"municao\": 20,\n" +
+                        "    \"agua\": 40,\n" +
+                        "    \"comida\": 10\n" +
+                        "  }\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
@@ -88,17 +88,19 @@ class RebeldeControllerTest {
         this.mockMvc.perform(post("/rebelde")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
+                        "  \"id\": \"string\",\n" +
+                        "  \"nome\": \"Bodhi Rook\",\n" +
                         "  \"idade\": 25,\n" +
-                        "  \"genero\": \"MASCULINO\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
-                        "    \"z\": -70,\n" +
+                        "    \"z\": -80,\n" +
                         "    \"nomeBase\": \"Jedha\"\n" +
                         "  },\n" +
-                        "  \"inventario\": [\n" +
-                        "    {\n" +
-                        "    }\n" +
-                        "  ]\n" +
+                        "  \"inventario\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"agua\": 40,\n" +
+                        "    \"comida\": 10\n" +
+                        "  }\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
@@ -110,21 +112,22 @@ class RebeldeControllerTest {
         this.mockMvc.perform(post("/rebelde")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
+                        "  \"id\": \"string\",\n" +
                         "  \"nome\": \"Bodhi Rook\",\n" +
                         "  \"idade\": 25,\n" +
                         "  \"genero\": \"GOY\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
-                        "    \"z\": -70,\n" +
+                        "    \"z\": -80,\n" +
                         "    \"nomeBase\": \"Jedha\"\n" +
                         "  },\n" +
-                        "  \"inventario\": [\n" +
-                        "    {\n" +
-                        "      \"tipoItem\": \"MUNICAO\",\n" +
-                        "      \"qtd\": 20\n" +
-                        "    }\n" +
-                        "  ]\n" +
+                        "  \"inventario\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"municao\": 20,\n" +
+                        "    \"agua\": 40,\n" +
+                        "    \"comida\": 10\n" +
+                        "  }\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
@@ -136,21 +139,22 @@ class RebeldeControllerTest {
         this.mockMvc.perform(post("/rebelde")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
+                        "  \"id\": \"string\",\n" +
                         "  \"nome\": \"Bodhi Rook\",\n" +
                         "  \"idade\": 25,\n" +
-                        "  \"genero\": \"MACULINO\",\n" +
+                        "  \"genero\": \"MASCULINO\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
                         "    \"y\": -65,\n" +
-                        "    \"z\": -70,\n" +
+                        "    \"z\": -80,\n" +
                         "    \"nomeBase\": \"Jedha\"\n" +
                         "  },\n" +
-                        "  \"inventario\": [\n" +
-                        "    {\n" +
-                        "      \"tipoItem\": \"VIDEOGAME\",\n" +
-                        "      \"qtd\": 20\n" +
-                        "    }\n" +
-                        "  ]\n" +
+                        "  \"inventario\": {\n" +
+                        "    \"arma\": dois,\n" +
+                        "    \"municao\": 20,\n" +
+                        "    \"agua\": 40,\n" +
+                        "    \"comida\": 10\n" +
+                        "  }\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof HttpMessageNotReadableException))
