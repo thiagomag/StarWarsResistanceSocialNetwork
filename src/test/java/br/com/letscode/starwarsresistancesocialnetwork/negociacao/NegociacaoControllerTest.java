@@ -31,61 +31,80 @@ class NegociacaoControllerTest {
                 .andExpect(status().isOk());
     }
 
-    //NOVA Negociação == Arquivo tem que estar vazio
     @Test
-    void adicionaNovaNegociacao() throws Exception {
-        this.mockMvc.perform(post("/negociacao/2a94818f-8112-45ee-883a-ed2bd9968935")
+    void negociacaoRealizada() throws Exception {
+        this.mockMvc.perform(post("/negociacao")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "        \"id\": \"a73251f5-6d16-4e24-ab66-ca7cd63969c7\",\n" +
-                        "        \"nome\": \"Bodhi Rook\",\n" +
-                        "        \"idade\": 25,\n" +
-                        "        \"genero\": \"MASCULINO\",\n" +
-                        "        \"localizacao\": {\n" +
-                        "            \"x\": 100,\n" +
-                        "            \"y\": -65,\n" +
-                        "            \"z\": -70,\n" +
-                        "            \"nomeBase\": \"Jedha\"\n" +
-                        "        },\n" +
-                        "        \"inventario\": [\n" +
-                        "            {\n" +
-                        "                \"tipoItem\": \"MUNICAO\",\n" +
-                        "                \"qtd\": 1\n" +
-                        "            }\n" +
-                        "        ]\n" +
-                        "    }"))
+                        "  \"idRebelde1\": \"f78b007d-d2b0-4ff2-8192-04f460fd5e77\",\n" +
+                        "  \"inventario1\": {\n" +
+                        "    \"arma\": 1,\n" +
+                        "    \"agua\": 1\n" +
+                        "  },\n" +
+                        "  \"idRebelde2\": \"9146af65-794c-4ba8-a3cb-0e3fb5d794bb\",\n" +
+                        "  \"inventario2\": {\n" +
+                        "    \"municao\": 2\n" +
+                        "  }\n" +
+                        "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    //Negociacao EXISTENTE no arquivo >> compara a nova entrada
     @Test
-    void comparaNegociacaoInvalida() throws Exception {
-        this.mockMvc.perform(post("/negociacao/661cd317-804b-49c3-a0ae-2d2422423845")
+    void negociacaoNaoCompativel() throws Exception {
+        this.mockMvc.perform(post("/negociacao")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("[\n" +
-                        "    {\n" +
-                        "        \"tipoItem\" : \"ARMA\",\n" +
-                        "        \"qtd\" : 1\n" +
-                        "    }\n" +
-                        "]"))
+                .content("{\n" +
+                        "  \"idRebelde1\": \"f78b007d-d2b0-4ff2-8192-04f460fd5e77\",\n" +
+                        "  \"inventario1\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"agua\": 2\n" +
+                        "  },\n" +
+                        "  \"idRebelde2\": \"9146af65-794c-4ba8-a3cb-0e3fb5d794bb\",\n" +
+                        "  \"inventario2\": {\n" +
+                        "    \"municao\": 2,\n" +
+                        "    \"agua\": 2\n" +
+                        "  }\n" +
+                        "}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void comparaNegociacaoNula() throws Exception {
+    void negociacaoQtdItemInvalida() throws Exception {
         this.mockMvc.perform(post("/negociacao/661cd317-804b-49c3-a0ae-2d2422423845")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("[\n" +
-                        "    {\n" +
-                        "        \"tipoItem\" : ,\n" +
-                        "        \"qtd\" : \n" +
-                        "    }\n" +
-                        "]"))
+                .content("{\n" +
+                        "  \"idRebelde1\": \"f78b007d-d2b0-4ff2-8192-04f460fd5e77\",\n" +
+                        "  \"inventario1\": {\n" +
+                        "    \"arma\": 50,\n" +
+                        "  },\n" +
+                        "  \"idRebelde2\": \"9146af65-794c-4ba8-a3cb-0e3fb5d794bb\",\n" +
+                        "  \"inventario2\": {\n" +
+                        "    \"agua\": 100\n" +
+                        "  }\n" +
+                        "}"))
                 .andDo(print())
-                .andExpect(result -> Assertions.assertFalse(result.getResolvedException() instanceof MethodArgumentNotValidException))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void negociacaoNula() throws Exception {
+        this.mockMvc.perform(post("/negociacao/661cd317-804b-49c3-a0ae-2d2422423845")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"idRebelde1\": \"f78b007d-d2b0-4ff2-8192-04f460fd5e77\",\n" +
+                        "  \"inventario1\": {\n" +
+                        "    \"arma\": 2,\n" +
+                        "    \"agua\": \n" +
+                        "  },\n" +
+                        "  \"idRebelde2\": \"9146af65-794c-4ba8-a3cb-0e3fb5d794bb\",\n" +
+                        "  \"inventario2\": {\n" +
+                        "    \"agua\": 2\n" +
+                        "  }\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
 }
