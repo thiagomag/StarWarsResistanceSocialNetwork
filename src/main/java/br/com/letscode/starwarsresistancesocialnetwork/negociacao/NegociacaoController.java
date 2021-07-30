@@ -1,15 +1,10 @@
 package br.com.letscode.starwarsresistancesocialnetwork.negociacao;
 
-import br.com.letscode.starwarsresistancesocialnetwork.rebelde.Rebelde;
-import br.com.letscode.starwarsresistancesocialnetwork.rebelde.RebeldeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
-import java.util.List;
 
 @RequestMapping("/negociacao")
 @RestController
@@ -17,12 +12,6 @@ import java.util.List;
 public class NegociacaoController {
 
     private final NegociacaoService negociacaoService;
-    private final RebeldeService rebeldeService;
-
-    @GetMapping()
-    public List<Rebelde> listAll() throws IOException {
-        return rebeldeService.listAll();
-    }
 
     @PostMapping()
     public String addNegociacao( @RequestBody Negociacao negociacao) {

@@ -56,4 +56,8 @@ public class RebeldeService {
         return (inventario.getArma()*4) + (inventario.getMunicao()*3)
                 + (inventario.getAgua()*2) + inventario.getComida();
     }
+
+    public void updateRepository(List<Rebelde> rebelList) throws IOException {
+        rebeldeRepository.reescreverArquivo(rebelList);
+    }
 }
