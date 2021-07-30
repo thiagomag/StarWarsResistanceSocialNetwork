@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -36,12 +37,12 @@ public class RebeldeRepository {
     }
 
     public Rebelde inserirArquivo(Rebelde rebelde) throws IOException {
-        write(format(rebelde));
+        write(format(rebelde), StandardOpenOption.APPEND);
         return rebelde;
     }
 
-    private void write(String rebeldeStr) throws IOException {
-        try (BufferedWriter bf = Files.newBufferedWriter(path)) {
+    private void write(String rebeldeStr, StandardOpenOption option) throws IOException {
+        try (BufferedWriter bf = Files.newBufferedWriter(path, option)) {
             bf.flush();
             bf.write(rebeldeStr);
         }
@@ -60,7 +61,7 @@ public class RebeldeRepository {
         for (Rebelde rebeldeBuilder : listaRebeldes) {
             builder.append(format(rebeldeBuilder));
         }
-        write(builder.toString());
+        write(builder.toString(), StandardOpenOption.CREATE);
     }
 
     private String format(Rebelde rebelde) {

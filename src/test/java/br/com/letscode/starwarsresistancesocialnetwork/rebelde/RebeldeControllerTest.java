@@ -38,8 +38,8 @@ class RebeldeControllerTest {
         this.mockMvc.perform(post("/rebelde")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"nome\": \"Bodhi Rook\",\n" +
-                        "  \"idade\": 25,\n" +
+                        "  \"nome\": \"Ajunta Pall\",\n" +
+                        "  \"idade\": 62,\n" +
                         "  \"genero\": \"MASCULINO\",\n" +
                         "  \"localizacao\": {\n" +
                         "    \"x\": 100,\n" +
@@ -163,13 +163,13 @@ class RebeldeControllerTest {
 
     @Test
     void atualizarLocalizacao() throws Exception {
-        this.mockMvc.perform(patch("/rebelde/atualizaLocal/2a94818f-8112-45ee-883a-ed2bd9968935")
+        this.mockMvc.perform(patch("/rebelde/atualizaLocal/ec04210f-f9cf-4481-8ead-0c757e503431")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"x\": 480,\n" +
-                        "  \"y\": 740,\n" +
-                        "  \"z\": 320,\n" +
-                        "  \"nomeBase\": \"Tatooine\"\n" +
+                        "  \"x\": 0,\n" +
+                        "  \"y\": 0,\n" +
+                        "  \"z\": 0,\n" +
+                        "  \"nomeBase\": \"Coruscant\"\n" +
                         "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
