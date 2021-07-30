@@ -18,24 +18,20 @@ public class NegociacaoService {
 
     @SneakyThrows
     public String negociacao(Negociacao negociacao) {
-        if (rebeldeService.checkRebel(negociacao.getIdRebelde1())){
+        if (rebeldeService.checkRebel(negociacao.getIdRebelde1()))
             throw new IdRebeldeInvalidoException(negociacao.getIdRebelde1());
-        }
-        if (rebeldeService.checkRebel(negociacao.getIdRebelde2())){
+        if (rebeldeService.checkRebel(negociacao.getIdRebelde2()))
             throw new IdRebeldeInvalidoException(negociacao.getIdRebelde2());
-        }
         return checarInventario(negociacao);
     }
 
     private String checarInventario(Negociacao negociacao) {
         if (rebeldeService.valorInventario(negociacao.getInventario1())
-                != rebeldeService.valorInventario(negociacao.getInventario2())) {
+                != rebeldeService.valorInventario(negociacao.getInventario2()))
             throw new ValoresNaoBatemException();
-        }
         if (!(inventarioTemOsItems(negociacao.getIdRebelde1(),negociacao.getInventario1())
-                && inventarioTemOsItems(negociacao.getIdRebelde2(),negociacao.getInventario2()))){
+                && inventarioTemOsItems(negociacao.getIdRebelde2(),negociacao.getInventario2())))
             throw new InventarioNaoTemOsItensException();
-        }
         return atualizaInventario(negociacao);
     }
 
@@ -51,11 +47,10 @@ public class NegociacaoService {
     public String atualizaInventario(Negociacao negociacao) {
         List<Rebelde> rebeldesList = rebeldeService.listAll();
         for (Rebelde rebelde : rebeldesList) {
-            if (rebelde.getId().equals(negociacao.getIdRebelde1())){
+            if (rebelde.getId().equals(negociacao.getIdRebelde1()))
                 atualizaInventario(rebelde, negociacao.getInventario2(), negociacao.getInventario1());
-            } else if (rebelde.getId().equals(negociacao.getIdRebelde2())){
+            else if (rebelde.getId().equals(negociacao.getIdRebelde2()))
                 atualizaInventario(rebelde, negociacao.getInventario1(), negociacao.getInventario2());
-            }
         }
         rebeldeService.updateRepository(rebeldesList);
         return "Negociacao feita.";

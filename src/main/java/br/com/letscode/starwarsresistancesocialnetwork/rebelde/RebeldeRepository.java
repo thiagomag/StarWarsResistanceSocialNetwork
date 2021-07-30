@@ -2,16 +2,15 @@ package br.com.letscode.starwarsresistancesocialnetwork.rebelde;
 
 import br.com.letscode.starwarsresistancesocialnetwork.inventario.Inventario;
 import br.com.letscode.starwarsresistancesocialnetwork.localizacao.Localizacao;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -21,13 +20,15 @@ import java.util.stream.Collectors;
 @Component
 public class RebeldeRepository {
 
-    private File file;
+    private Path path;
 
-    public RebeldeRepository(@Value("${files.rebeldes}") String fileName) {
+    @PostConstruct
+    public void init() {
         try {
-            this.file = new ClassPathResource(fileName).getFile();
-            if (!file.exists()) {
-                Files.createFile(Path.of(file.getPath()));
+            String caminho = "src/main/resources/dados/rebeldes.csv";
+            path = Paths.get(caminho);
+            if (!path.toFile().exists()) {
+                Files.createFile(path);
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -40,7 +41,7 @@ public class RebeldeRepository {
     }
 
     private void write(String rebeldeStr) throws IOException {
-        try (BufferedWriter bf = Files.newBufferedWriter(Path.of(file.getPath()))) {
+        try (BufferedWriter bf = Files.newBufferedWriter(path)) {
             bf.flush();
             bf.write(rebeldeStr);
         }
@@ -48,7 +49,7 @@ public class RebeldeRepository {
 
     public List<Rebelde> listAll() throws IOException {
         List<Rebelde> rebeldes;
-        try (BufferedReader br = Files.newBufferedReader(Path.of(file.getPath()))) {
+        try (BufferedReader br = Files.newBufferedReader(path)) {
             rebeldes = br.lines().filter(Objects::nonNull).filter(Predicate.not(String::isEmpty)).map(this::getRebelde).collect(Collectors.toList());
         }
         return rebeldes;
